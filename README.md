@@ -2,9 +2,9 @@
 
 ## Motivation
 
-Often, especially in multi-user projects, we forget to document new environment variables. Ultimately this results in other team members not setting this ENV and and seeing unexpected failures, sometimes far away from where the variable was used.
+Often, especially in multi-user projects, we forget to document new environment variables. Ultimately this results in other team members not setting the variable and seeing unexpected failures, sometimes far away from where the variable was used.
 
-With dotenv for inspiration, allow a user to define what environment variables are expected and force an exception EARLY at runtime rather than wait for whatever unexpected behavior happens by that variable being missing.
+With dotenv for inspiration, allow a user to define what environment variables are expected and throw an exception early at runtime, rather than waiting for whatever unexpected behavior a missing variable causes.
 
 ## Installation
 
@@ -14,8 +14,8 @@ npm i @natebourgoin/requiredenv
 
 ## Basic Usage
 
-- Create a file in the root of your project called required.env
-- List environment variables by name that your care about (one per line) without values
+- Create a file in the root of your project called `required.env`
+- List the environment variables you care about by name (one per line), without values
 
 For example:
 
@@ -31,11 +31,11 @@ Then, early in your program, do the following:
 require('@natebourgoin/requiredenv').checkRequired()
 ```
 
-If an environment variable that is listed in required.env is not defined in process.env, this will throw an exception
+If an environment variable listed in `required.env` is not defined in `process.env`, this throws an exception.
 
 ## Alternate File for Requirements
 
-If you wish, you can specify a specific file to be parsed rather than the default 'required.env'
+If you wish, you can specify a specific file to be parsed rather than the default `required.env`:
 
 ```javascript
 require('@natebourgoin/requiredenv').checkRequired({ environmentDefinition : "path/to/file" });
@@ -43,14 +43,14 @@ require('@natebourgoin/requiredenv').checkRequired({ environmentDefinition : "pa
 
 ## Integration with dotenv
 
-By passing the output of dotenv to requiredenv you can also make sure that all items that are defined in .env are also defined in require.env. This is useful to enforce that the definition file is kept up to date.
+By passing the output of dotenv to requiredenv you can also make sure that all items that are defined in .env are also defined in `required.env`. This is useful to enforce that the definition file is kept up to date.
 
 ```javascript
-let parsed = require('dotenv').config().parsed();
+let parsed = require('dotenv').config().parsed;
 require('@natebourgoin/requiredenv').checkRequired({ checkInRequiredEnv : parsed });
 ```
 
-You are also able to take advantage of this behavior without dotenv by defining the variables you are expecting to find.:
+You are also able to take advantage of this behavior without dotenv by defining the variables you expect to find:
 
 ```javascript
 let expected = {VAR1 : 'UNUSED VALUE', VAR2 : 'UNUSED VALUE', VAR3: 'UNUSED VALUE'}
@@ -61,7 +61,7 @@ require('@natebourgoin/requiredenv').checkRequired({ checkInRequiredEnv : expect
 
 ## Comments in required.env
 
-If a line starts with a '#' character it is ignored as a comment. This is useful to add documentation to required.env
+If a line starts with a `#` character, it is ignored as a comment. This is useful for documenting each variable in `required.env`.
 
 For example:
 

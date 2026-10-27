@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nate53085/requiredenv.git"
+    "url": "git+https://github.com/NateAtOrgTech/requiredenv.git"
   },
   "keywords": [
     "dotenv",
@@ -18,9 +18,9 @@
   "author": "Nate Bourgoin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Nate53085/requiredenv/issues"
+    "url": "https://github.com/NateAtOrgTech/requiredenv/issues"
   },
-  "homepage": "https://github.com/Nate53085/requiredenv#readme",
+  "homepage": "https://github.com/NateAtOrgTech/requiredenv#readme",
   "devDependencies": {
     "codecov": "^3.8.1",
     "dotenv": "^8.2.0",
