@@ -4,7 +4,7 @@
   "description": "Allows you to configure your project to fail early at runtime if required environment variables aren't set",
   "main": "lib/main.js",
   "scripts": {
-    "test": "tap tests/*.js --100"
+    "test": "node tests/tests.js"
   },
   "repository": {
     "type": "git",

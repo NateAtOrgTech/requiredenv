@@ -42,3 +42,23 @@ tap.throws(function () {
   process.env.MISSING = "foo";
   requiredEnv.checkRequired({ environmentDefinition : 'tests/test_files/missing_check_throws.env', checkInRequiredEnv : { 'MISSING': 'unused value' }});
 }, new Error(`MISSING is not defined in tests/test_files/missing_check_throws.env as expected`), 'An Error should be thrown when a reverse check fails');
+tap.doesNotThrow('surrounding whitespace and blank lines are ignored', () => {
+  process.env.PADDED_VAR = "padded";
+  process.env.TABBED_VAR = "tabbed";
+  requiredEnv.checkRequired({ environmentDefinition : 'tests/test_files/whitespace.env' });
+});
+
+tap.doesNotThrow('indented comments are ignored', () => {
+  process.env.INDENTED_COMMENT_VAR = "value ignored";
+  requiredEnv.checkRequired({ environmentDefinition : 'tests/test_files/indented_comments.env' });
+});
+
+tap.doesNotThrow('Windows line endings parse without throwing', () => {
+  process.env.CRLF_ONE = "one";
+  process.env.CRLF_TWO = "two";
+  requiredEnv.checkRequired({ environmentDefinition : 'tests/test_files/crlf.env' });
+});
+
+tap.doesNotThrow('reverse check matches entries that have surrounding whitespace', () => {
+  requiredEnv.checkRequired({ environmentDefinition : 'tests/test_files/whitespace.env', checkInRequiredEnv : { 'PADDED_VAR': 'unused value' }});
+});
