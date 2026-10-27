@@ -1,12 +1,14 @@
 {
   "name": "@natebourgoin/requiredenv",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Fail fast at startup when required environment variables aren't set, using a .env-style list of names",
   "main": "lib/main.js",
+  "types": "lib/main.d.ts",
   "files": [
     "lib"
   ],
   "scripts": {
+    "lint": "eslint .",
     "test": "node --test --experimental-test-coverage --test-coverage-include=lib/** --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 tests/tests.js"
   },
   "repository": {
@@ -25,7 +27,8 @@
   },
   "homepage": "https://github.com/NateAtOrgTech/requiredenv#readme",
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "eslint": "^7.16.0"
+    "@eslint/js": "^10.0.1",
+    "dotenv": "^18.0.9",
+    "eslint": "^10.13.0"
   }
 }

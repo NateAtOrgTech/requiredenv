@@ -6,7 +6,9 @@ Often, especially in multi-user projects, we forget to document new environment 
 
 With dotenv for inspiration, allow a user to define what environment variables are expected and throw an exception early at runtime, rather than waiting for whatever unexpected behavior a missing variable causes.
 
-requiredenv has no runtime dependencies.
+requiredenv has no runtime dependencies and includes TypeScript types.
+
+It only checks that variables exist. It doesn't load them (use dotenv or Node's `--env-file` for that), and it doesn't check types or formats. If you need that, look at a schema validator such as envalid or zod.
 
 ## Installation
 
@@ -48,9 +50,19 @@ If you wish, you can specify a specific file to be parsed rather than the defaul
 require('@natebourgoin/requiredenv').checkRequired({ environmentDefinition : ".env.example" });
 ```
 
+Like dotenv, relative paths are resolved from the current working directory (`process.cwd()`), not from the file that calls requiredenv. If you start your app from a different directory, pass an absolute path, for example `path.join(__dirname, 'required.env')`.
+
 ## Integration with dotenv
 
-By passing the output of dotenv to requiredenv you can also make sure that all items that are defined in .env are also defined in `required.env`. This is useful to enforce that the definition file is kept up to date.
+requiredenv can also make sure that every variable in your `.env` is listed in `required.env`. This keeps the definition file up to date. Pass the path to your `.env`:
+
+```javascript
+require('@natebourgoin/requiredenv').checkRequired({ checkInRequiredEnv : ".env" });
+```
+
+If that file doesn't exist, as is usual in production, this check is skipped. It reads the file the same way as the definition file, so it works whether you load `.env` with dotenv, with Node's `--env-file`, or not at all.
+
+You can also pass dotenv's output directly:
 
 ```javascript
 let parsed = require('dotenv').config().parsed;
@@ -72,7 +84,7 @@ If any of these variables are not listed in the definition file, requiredenv thr
 
 The definition file follows `.env` syntax:
 
-- Each line is a variable name, optionally followed by `=` and a value. Values are ignored.
+- Each line is a variable name, optionally followed by `=` and a value, or by dotenv's `: value` form. Values are ignored.
 - A leading `export ` is allowed, as in shell-style `.env` files.
 - Lines starting with `#` are comments, and so is anything after ` #` on a line.
 - Quoted values (`"`, `'`, or `` ` ``) may span multiple lines; the lines inside them are not read as names.
