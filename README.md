@@ -60,7 +60,7 @@ requiredenv can also make sure that every variable in your `.env` is listed in `
 require('@natebourgoin/requiredenv').checkRequired({ checkInRequiredEnv : ".env" });
 ```
 
-If that file doesn't exist, as is usual in production, this check is skipped. It reads the file the same way as the definition file, so it works whether you load `.env` with dotenv, with Node's `--env-file`, or not at all.
+If that file doesn't exist, as is usual in production, this check is skipped. The file is read the way dotenv reads it, so lines dotenv would ignore are ignored here too. That means it works whether you load `.env` with dotenv, with Node's `--env-file`, or not at all.
 
 You can also pass dotenv's output directly:
 

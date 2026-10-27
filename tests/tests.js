@@ -225,10 +225,17 @@ test('reverse check skips a .env file that does not exist', () => {
   });
 });
 
-test('reverse check still reports parse errors in the .env file', () => {
+test('reverse check skips .env lines that dotenv would ignore', () => {
+  withEnv({ GOOD: 'set', OPEN: 'set', AFTER: 'set' }, () => {
+    assert.throws(
+      () => requiredEnv.checkRequired({ environmentDefinition: fixture('lenient_required.env'), checkInRequiredEnv: fixture('lenient.env') }),
+      { notListed: ['UNLISTED'] },
+    );
+  });
+});
+
+test('reverse check still throws if the .env path cannot be read', () => {
   withEnv({ LISTED_IN_ENV: 'set' }, () => {
-    assert.throws(() => requiredEnv.checkRequired({ environmentDefinition: fixture('listed_only.env'), checkInRequiredEnv: fixture('invalid_line.env') }), {
-      message: 'Unable to parse line 2 of tests/test_files/invalid_line.env: this is not a variable',
-    });
+    assert.throws(() => requiredEnv.checkRequired({ environmentDefinition: fixture('listed_only.env'), checkInRequiredEnv: fixture('default') }), { code: 'EISDIR' });
   });
 });
