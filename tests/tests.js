@@ -98,7 +98,7 @@ test('empty values pass with allowEmptyValues', () => {
 
 test('plays well with dotenv', () => {
   withEnv({ DOTENV_TEST1: undefined, DOTENV_TEST2: undefined }, () => {
-    const dotEnvResult = dotEnv.config({ path: fixture('dotenv.env') });
+    const dotEnvResult = dotEnv.config({ path: fixture('dotenv.env'), quiet: true });
     requiredEnv.checkRequired({ environmentDefinition: fixture('test_dotenv_required.env'), checkInRequiredEnv: dotEnvResult.parsed });
   });
 });
@@ -195,5 +195,47 @@ test('throws a format error for lines that are not .env syntax', () => {
 test('throws on an unterminated quoted value', () => {
   assert.throws(() => requiredEnv.checkRequired({ environmentDefinition: fixture('unterminated.env') }), {
     message: 'Unterminated quoted value for OPEN on line 1 of tests/test_files/unterminated.env',
+  });
+});
+
+test('reads names from dotenv\'s KEY: value form', () => {
+  withEnv({ COLON_VAR: 'set', COLON_QUOTED: 'set' }, () => {
+    requiredEnv.checkRequired({ environmentDefinition: fixture('colon_syntax.env') });
+  });
+});
+
+test('reverse check reads a .env file when given a path', () => {
+  withEnv({ DOTENV_TEST1: 'set', DOTENV_TEST2: 'set' }, () => {
+    requiredEnv.checkRequired({ environmentDefinition: fixture('test_dotenv_required.env'), checkInRequiredEnv: fixture('dotenv.env') });
+  });
+});
+
+test('reverse check names variables in the .env file that are not listed', () => {
+  withEnv({ LISTED_IN_ENV: 'set' }, () => {
+    assert.throws(
+      () => requiredEnv.checkRequired({ environmentDefinition: fixture('listed_only.env'), checkInRequiredEnv: fixture('unlisted.env') }),
+      { message: 'NOT_LISTED_IN_ENV is not defined in tests/test_files/listed_only.env as expected', notListed: ['NOT_LISTED_IN_ENV'] },
+    );
+  });
+});
+
+test('reverse check skips a .env file that does not exist', () => {
+  withEnv({ LISTED_IN_ENV: 'set' }, () => {
+    requiredEnv.checkRequired({ environmentDefinition: fixture('listed_only.env'), checkInRequiredEnv: fixture('does_not_exist.env') });
+  });
+});
+
+test('reverse check skips .env lines that dotenv would ignore', () => {
+  withEnv({ GOOD: 'set', OPEN: 'set', AFTER: 'set' }, () => {
+    assert.throws(
+      () => requiredEnv.checkRequired({ environmentDefinition: fixture('lenient_required.env'), checkInRequiredEnv: fixture('lenient.env') }),
+      { notListed: ['UNLISTED'] },
+    );
+  });
+});
+
+test('reverse check still throws if the .env path cannot be read', () => {
+  withEnv({ LISTED_IN_ENV: 'set' }, () => {
+    assert.throws(() => requiredEnv.checkRequired({ environmentDefinition: fixture('listed_only.env'), checkInRequiredEnv: fixture('default') }), { code: 'EISDIR' });
   });
 });
