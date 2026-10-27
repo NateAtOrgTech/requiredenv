@@ -1,6 +1,6 @@
 {
   "name": "@natebourgoin/requiredenv",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Allows you to configure your project to fail early at runtime if required environment variables aren't set",
   "main": "lib/main.js",
   "scripts": {
