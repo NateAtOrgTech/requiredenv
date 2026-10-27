@@ -1,10 +1,13 @@
 {
   "name": "@natebourgoin/requiredenv",
-  "version": "0.2.1",
-  "description": "Allows you to configure your project to fail early at runtime if required environment variables aren't set",
+  "version": "0.3.0",
+  "description": "Fail fast at startup when required environment variables aren't set, using a .env-style list of names",
   "main": "lib/main.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "test": "node tests/tests.js"
+    "test": "node --test --experimental-test-coverage --test-coverage-include=lib/** --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 tests/tests.js"
   },
   "repository": {
     "type": "git",
@@ -22,9 +25,7 @@
   },
   "homepage": "https://github.com/NateAtOrgTech/requiredenv#readme",
   "devDependencies": {
-    "codecov": "^3.8.1",
     "dotenv": "^8.2.0",
-    "eslint": "^7.16.0",
-    "tap": "^14.11.0"
+    "eslint": "^7.16.0"
   }
 }
